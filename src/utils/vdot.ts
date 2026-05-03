@@ -198,6 +198,52 @@ export function calculateTrainingPaces(vdot: number): TrainingPaces {
 }
 
 /**
+ * Predicts race time for a given distance based on VDOT.
+ * Uses bisection method to solve the VDOT equation for time.
+ * @param vdot VDOT value.
+ * @param distanceMeters Target distance in meters.
+ * @returns Predicted time in seconds.
+ */
+export function predictTime(vdot: number, distanceMeters: number): number {
+  let low = 2; // 2 minutes (minimum sensible time)
+  let high = 600; // 600 minutes (10 hours)
+  
+  // Bisection method to solve VDOT = VO2(D/t) / %Max(t)
+  for (let i = 0; i < 25; i++) {
+    const mid = (low + high) / 2;
+    const v = distanceMeters / mid;
+    const vo2 = calculateVO2(v);
+    const pMax = calculatePercentMax(mid);
+    const estimatedVDOT = vo2 / pMax;
+    
+    // Higher estimated VDOT means the time is too fast
+    if (estimatedVDOT > vdot) {
+      low = mid;
+    } else {
+      high = mid;
+    }
+  }
+  
+  return ((low + high) / 2) * 60;
+}
+
+/**
+ * Formats seconds into HH:MM:SS or MM:SS duration string.
+ * @param totalSeconds Total seconds.
+ * @returns Formatted string.
+ */
+export function formatDuration(totalSeconds: number): string {
+  const h = Math.floor(totalSeconds / 3600);
+  const m = Math.floor((totalSeconds % 3600) / 60);
+  const s = Math.round(totalSeconds % 60);
+  
+  if (h > 0) {
+    return `${h}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+  }
+  return `${m}:${s.toString().padStart(2, '0')}`;
+}
+
+/**
  * Formats seconds into a M:SS pace string.
  * @param totalSeconds Total seconds.
  * @returns Formatted string.

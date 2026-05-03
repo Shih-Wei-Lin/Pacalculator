@@ -137,13 +137,23 @@
   margin-top: 8px;
 }
 
-.paces-grid {
+.results h3 {
+  margin: 32px 0 16px;
+  font-size: 20px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 8px;
+}
+
+.paces-grid,
+.predictions-grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 12px;
 }
 
-.pace-card {
+.pace-card,
+.prediction-card {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -153,18 +163,21 @@
   border: 1px solid var(--border);
 }
 
-.pace-label {
+.pace-label,
+.prediction-label {
   font-weight: 600;
   color: var(--text-h);
 }
 
-.pace-value {
+.pace-value,
+.prediction-value {
   font-family: var(--mono);
   color: var(--accent);
 }
 
 @media (min-width: 640px) {
-  .paces-grid {
+  .paces-grid,
+  .predictions-grid {
     grid-template-columns: 1fr 1fr;
   }
 }
