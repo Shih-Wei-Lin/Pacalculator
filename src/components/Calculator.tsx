@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { calculateVDOT, calculateTrainingPaces, formatPace, predictTime, formatDuration } from '../utils/vdot';
 import type { TrainingPaces } from '../utils/vdot';
+import { TrainingPlans } from './TrainingPlans';
 
 const COMMON_DISTANCES = [
   { label: '5K', value: 5000 },
@@ -29,6 +30,7 @@ export const Calculator: React.FC = () => {
   const [altitude, setAltitude] = useState<number>(0);
   const [temperature, setTemperature] = useState<number>(12.8);
   const [showAdvanced, setShowAdvanced] = useState<boolean>(false);
+  const [showPlans, setShowPlans] = useState<boolean>(false);
   const [vdot, setVdot] = useState<number | null>(null);
   const [paces, setPaces] = useState<TrainingPaces | null>(null);
 
@@ -185,6 +187,15 @@ export const Calculator: React.FC = () => {
                   ))}
                 </div>
               </div>
+
+              <button 
+                className="plans-toggle-btn"
+                onClick={() => setShowPlans(!showPlans)}
+              >
+                {showPlans ? '隱藏建議課表 ↑' : '查看根據跑力產出的建議課表 (T/白色/半馬) ↓'}
+              </button>
+
+              {showPlans && <TrainingPlans paces={paces} />}
             </>
           )}
         </div>
