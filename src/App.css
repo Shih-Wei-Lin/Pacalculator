@@ -95,6 +95,15 @@
   text-align: center;
 }
 
+.environment-inputs {
+  display: flex;
+  gap: 16px;
+}
+
+.environment-inputs .input-group {
+  flex: 1;
+}
+
 .results {
   margin-top: 24px;
   display: flex;
@@ -120,6 +129,12 @@
   font-size: 48px;
   font-weight: 700;
   color: var(--accent);
+}
+
+.vdot-note {
+  font-size: 14px;
+  color: var(--text);
+  margin-top: 8px;
 }
 
 .paces-grid {

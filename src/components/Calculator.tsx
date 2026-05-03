@@ -14,20 +14,22 @@ export const Calculator: React.FC = () => {
   const [hours, setHours] = useState<number>(0);
   const [minutes, setMinutes] = useState<number>(20);
   const [seconds, setSeconds] = useState<number>(0);
+  const [altitude, setAltitude] = useState<number>(0);
+  const [temperature, setTemperature] = useState<number>(12.8);
   const [vdot, setVdot] = useState<number | null>(null);
   const [paces, setPaces] = useState<TrainingPaces | null>(null);
 
   useEffect(() => {
     const totalSeconds = hours * 3600 + minutes * 60 + seconds;
     if (totalSeconds > 0 && distance > 0) {
-      const calculatedVdot = calculateVDOT(distance, totalSeconds);
+      const calculatedVdot = calculateVDOT(distance, totalSeconds, altitude, temperature);
       setVdot(calculatedVdot);
       setPaces(calculateTrainingPaces(calculatedVdot));
     } else {
       setVdot(null);
       setPaces(null);
     }
-  }, [distance, hours, minutes, seconds]);
+  }, [distance, hours, minutes, seconds, altitude, temperature]);
 
   return (
     <div className="calculator-container">
@@ -79,11 +81,31 @@ export const Calculator: React.FC = () => {
         </div>
       </div>
 
+      <div className="environment-inputs">
+        <div className="input-group">
+          <label>Altitude (m)</label>
+          <input
+            type="number"
+            value={altitude}
+            onChange={(e) => setAltitude(Number(e.target.value))}
+          />
+        </div>
+        <div className="input-group">
+          <label>Temp (°C)</label>
+          <input
+            type="number"
+            value={temperature}
+            onChange={(e) => setTemperature(Number(e.target.value))}
+          />
+        </div>
+      </div>
+
       {vdot && (
         <div className="results">
           <div className="vdot-score">
-            <h3>Your VDOT</h3>
+            <h3>Sea Level VDOT</h3>
             <div className="vdot-value">{vdot.toFixed(2)}</div>
+            <p className="vdot-note">基於環境修正後的跑力值</p>
           </div>
 
           {paces && (
