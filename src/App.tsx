@@ -1,4 +1,5 @@
 import { Calculator } from './components/Calculator'
+import { ReferenceTable } from './components/ReferenceTable'
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
@@ -21,6 +22,11 @@ function App() {
         </div>
         
         <Calculator />
+
+        <details className="reference-details">
+          <summary>查看 VDOT 對照表 (Table 5.1)</summary>
+          <ReferenceTable />
+        </details>
       </section>
 
       <div className="ticks"></div>
