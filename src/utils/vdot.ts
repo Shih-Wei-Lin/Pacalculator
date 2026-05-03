@@ -253,3 +253,23 @@ export function formatPace(totalSeconds: number): string {
   const seconds = Math.round(totalSeconds % 60);
   return `${minutes}:${seconds.toString().padStart(2, '0')}`;
 }
+
+/**
+ * Converts speed (km/h) to pace (seconds per km).
+ * @param kmh Speed in km/h.
+ * @returns Pace in seconds per km.
+ */
+export function kmhToPace(kmh: number): number {
+  if (kmh <= 0) return 0;
+  return 3600 / kmh;
+}
+
+/**
+ * Converts pace (seconds per km) to speed (km/h).
+ * @param paceSperKm Pace in seconds per km.
+ * @returns Speed in km/h.
+ */
+export function paceToKmh(paceSperKm: number): number {
+  if (paceSperKm <= 0) return 0;
+  return 3600 / paceSperKm;
+}
