@@ -615,3 +615,71 @@ tr:hover {
     border-right-color: var(--border);
   }
 }
+
+/* Glassmorphism & Animations */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow);
+  transition: all 0.3s ease;
+}
+
+.glowing {
+  box-shadow: var(--glow);
+  border-color: var(--accent-border);
+}
+
+.glowing-border {
+  border: 1px solid transparent;
+  background-image: linear-gradient(var(--bg), var(--bg)), linear-gradient(90deg, var(--accent), #ff3b9a);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  box-shadow: var(--glow);
+  transition: all 0.3s ease;
+}
+
+.glowing-border:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 0 25px rgba(170, 59, 255, 0.6);
+  transform: translateY(-2px);
+}
+
+.hover-glow:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--glow);
+  border-color: var(--accent-border);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pop {
+  0% { transform: scale(0.9); opacity: 0; }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+.animate-slide-down {
+  animation: slideDown 0.4s ease-out forwards;
+}
+
+.animate-pop {
+  animation: pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.delay-1 {
+  animation-delay: 0.1s;
+}

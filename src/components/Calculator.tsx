@@ -23,21 +23,23 @@ const PREDICTION_DISTANCES = [
 ];
 
 export const Calculator: React.FC = () => {
-  const [distance, setDistance] = useState<number>(5000);
-  const [hours, setHours] = useState<number>(0);
-  const [minutes, setMinutes] = useState<number>(20);
-  const [seconds, setSeconds] = useState<number>(0);
-  const [altitude, setAltitude] = useState<number>(0);
-  const [temperature, setTemperature] = useState<number>(12.8);
+  const [distance, setDistance] = useState<number | string>(5000);
+  const [isCustomDistance, setIsCustomDistance] = useState<boolean>(false);
+  const [hours, setHours] = useState<number | string>(0);
+  const [minutes, setMinutes] = useState<number | string>(20);
+  const [seconds, setSeconds] = useState<number | string>(0);
+  const [altitude, setAltitude] = useState<number | string>(0);
+  const [temperature, setTemperature] = useState<number | string>(12.8);
   const [showAdvanced, setShowAdvanced] = useState<boolean>(false);
   const [showPlans, setShowPlans] = useState<boolean>(false);
   const [vdot, setVdot] = useState<number | null>(null);
   const [paces, setPaces] = useState<TrainingPaces | null>(null);
 
   useEffect(() => {
-    const totalSeconds = hours * 3600 + minutes * 60 + seconds;
-    if (totalSeconds > 0 && distance > 0) {
-      const calculatedVdot = calculateVDOT(distance, totalSeconds, altitude, temperature);
+    const totalSeconds = Number(hours) * 3600 + Number(minutes) * 60 + Number(seconds);
+    const distNum = Number(distance);
+    if (totalSeconds > 0 && distNum > 0) {
+      const calculatedVdot = calculateVDOT(distNum, totalSeconds, Number(altitude), Number(temperature));
       setVdot(calculatedVdot);
       setPaces(calculateTrainingPaces(calculatedVdot));
     } else {
@@ -54,26 +56,29 @@ export const Calculator: React.FC = () => {
           {COMMON_DISTANCES.map((d) => (
             <button
               key={d.label}
-              onClick={() => setDistance(d.value)}
-              className={distance === d.value ? 'active' : ''}
+              onClick={() => {
+                setDistance(d.value);
+                setIsCustomDistance(false);
+              }}
+              className={!isCustomDistance && Number(distance) === d.value ? 'active' : ''}
             >
               {d.label}
             </button>
           ))}
           <button 
-            className={!COMMON_DISTANCES.some(d => d.value === distance) ? 'active' : ''}
-            onClick={() => setDistance(0)}
+            className={isCustomDistance ? 'active' : ''}
+            onClick={() => setIsCustomDistance(true)}
           >
             自定義
           </button>
         </div>
-        {!COMMON_DISTANCES.some(d => d.value === distance) && (
+        {isCustomDistance && (
           <input
             type="number"
             placeholder="輸入公尺 (m)"
-            className="custom-distance-input"
-            value={distance || ''}
-            onChange={(e) => setDistance(Number(e.target.value))}
+            className="custom-distance-input animate-fade-in"
+            value={distance}
+            onChange={(e) => setDistance(e.target.value)}
           />
         )}
       </div>
@@ -84,20 +89,26 @@ export const Calculator: React.FC = () => {
           <input
             type="number"
             placeholder="時"
-            value={hours || ''}
-            onChange={(e) => setHours(Math.max(0, Number(e.target.value)))}
+            value={hours}
+            onChange={(e) => setHours(e.target.value)}
           />
           <input
             type="number"
             placeholder="分"
-            value={minutes || ''}
-            onChange={(e) => setMinutes(Math.max(0, Math.min(59, Number(e.target.value))))}
+            value={minutes}
+            onChange={(e) => {
+              const val = Number(e.target.value);
+              setMinutes(e.target.value === '' ? '' : Math.max(0, Math.min(59, val)));
+            }}
           />
           <input
             type="number"
             placeholder="秒"
-            value={seconds || ''}
-            onChange={(e) => setSeconds(Math.max(0, Math.min(59, Number(e.target.value))))}
+            value={seconds}
+            onChange={(e) => {
+              const val = Number(e.target.value);
+              setSeconds(e.target.value === '' ? '' : Math.max(0, Math.min(59, val)));
+            }}
           />
         </div>
       </div>
@@ -110,13 +121,13 @@ export const Calculator: React.FC = () => {
       </button>
 
       {showAdvanced && (
-        <div className="environment-inputs advanced-panel">
+        <div className="environment-inputs advanced-panel animate-slide-down glass-panel">
           <div className="input-group">
             <label>海拔 (m)</label>
             <input
               type="number"
               value={altitude}
-              onChange={(e) => setAltitude(Number(e.target.value))}
+              onChange={(e) => setAltitude(e.target.value)}
             />
           </div>
           <div className="input-group">
@@ -124,49 +135,49 @@ export const Calculator: React.FC = () => {
             <input
               type="number"
               value={temperature}
-              onChange={(e) => setTemperature(Number(e.target.value))}
+              onChange={(e) => setTemperature(e.target.value)}
             />
           </div>
         </div>
       )}
 
       {vdot && (
-        <div className="results">
-          <div className="vdot-score">
+        <div className="results animate-fade-in">
+          <div className="vdot-score glass-panel glowing">
             <h3>Sea Level VDOT</h3>
-            <div className="vdot-value">{vdot.toFixed(2)}</div>
+            <div className="vdot-value animate-pop">{vdot.toFixed(2)}</div>
             <p className="vdot-note">基於環境修正後的跑力值</p>
           </div>
 
           {paces && (
-            <>
+            <div className="animate-fade-in delay-1">
               <h3>Training Paces</h3>
               <div className="paces-grid">
-                <div className="pace-card">
+                <div className="pace-card glass-panel hover-glow">
                   <span className="pace-label">E (Easy)</span>
                   <span className="pace-value">
                     {formatPace(paces.easy.min)} - {formatPace(paces.easy.max)} / km
                   </span>
                 </div>
-                <div className="pace-card">
+                <div className="pace-card glass-panel hover-glow">
                   <span className="pace-label">M (Marathon)</span>
                   <span className="pace-value">
                     {formatPace(paces.marathon.min)} - {formatPace(paces.marathon.max)} / km
                   </span>
                 </div>
-                <div className="pace-card">
+                <div className="pace-card glass-panel hover-glow">
                   <span className="pace-label">T (Threshold)</span>
                   <span className="pace-value">
                     {formatPace(paces.threshold.min)} - {formatPace(paces.threshold.max)} / km
                   </span>
                 </div>
-                <div className="pace-card">
+                <div className="pace-card glass-panel hover-glow">
                   <span className="pace-label">I (Interval)</span>
                   <span className="pace-value">
                     {formatPace(paces.interval.min)} - {formatPace(paces.interval.max)} / km
                   </span>
                 </div>
-                <div className="pace-card">
+                <div className="pace-card glass-panel hover-glow">
                   <span className="pace-label">R (Repetition)</span>
                   <span className="pace-value">
                     {formatPace(paces.repetition.min)} - {formatPace(paces.repetition.max)} / km
@@ -178,7 +189,7 @@ export const Calculator: React.FC = () => {
                 <h3>Race Predictions</h3>
                 <div className="predictions-grid">
                   {PREDICTION_DISTANCES.map((pd) => (
-                    <div className="prediction-card" key={pd.label}>
+                    <div className="prediction-card glass-panel hover-glow" key={pd.label}>
                       <span className="prediction-label">{pd.label}</span>
                       <span className="prediction-value">
                         {formatDuration(predictTime(vdot, pd.value))}
@@ -189,14 +200,18 @@ export const Calculator: React.FC = () => {
               </div>
 
               <button 
-                className="plans-toggle-btn"
+                className="plans-toggle-btn glass-panel glowing-border"
                 onClick={() => setShowPlans(!showPlans)}
               >
                 {showPlans ? '隱藏建議課表 ↑' : '查看根據跑力產出的建議課表 (T/白色/半馬) ↓'}
               </button>
 
-              {showPlans && <TrainingPlans paces={paces} />}
-            </>
+              {showPlans && (
+                <div className="animate-slide-down">
+                  <TrainingPlans paces={paces} />
+                </div>
+              )}
+            </div>
           )}
         </div>
       )}

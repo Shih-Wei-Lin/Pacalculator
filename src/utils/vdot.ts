@@ -233,9 +233,10 @@ export function predictTime(vdot: number, distanceMeters: number): number {
  * @returns Formatted string.
  */
 export function formatDuration(totalSeconds: number): string {
-  const h = Math.floor(totalSeconds / 3600);
-  const m = Math.floor((totalSeconds % 3600) / 60);
-  const s = Math.round(totalSeconds % 60);
+  const roundedSeconds = Math.round(totalSeconds);
+  const h = Math.floor(roundedSeconds / 3600);
+  const m = Math.floor((roundedSeconds % 3600) / 60);
+  const s = roundedSeconds % 60;
   
   if (h > 0) {
     return `${h}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
@@ -249,8 +250,9 @@ export function formatDuration(totalSeconds: number): string {
  * @returns Formatted string.
  */
 export function formatPace(totalSeconds: number): string {
-  const minutes = Math.floor(totalSeconds / 60);
-  const seconds = Math.round(totalSeconds % 60);
+  const roundedSeconds = Math.round(totalSeconds);
+  const minutes = Math.floor(roundedSeconds / 60);
+  const seconds = roundedSeconds % 60;
   return `${minutes}:${seconds.toString().padStart(2, '0')}`;
 }
 

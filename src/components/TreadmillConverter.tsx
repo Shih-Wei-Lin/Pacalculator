@@ -2,23 +2,24 @@ import React, { useState } from 'react';
 import { kmhToPace, paceToKmh } from '../utils/vdot';
 
 export const TreadmillConverter: React.FC = () => {
-  const [kmh, setKmh] = useState<number>(12);
-  const [paceMin, setPaceMin] = useState<number>(5);
-  const [paceSec, setPaceSec] = useState<number>(0);
+  const [kmh, setKmh] = useState<number | string>(12);
+  const [paceMin, setPaceMin] = useState<number | string>(5);
+  const [paceSec, setPaceSec] = useState<number | string>(0);
 
-  const handleKmhChange = (val: number) => {
-    setKmh(val);
-    const paceSeconds = kmhToPace(val);
-    if (paceSeconds > 0) {
+  const handleKmhChange = (valStr: string) => {
+    setKmh(valStr);
+    const val = Number(valStr);
+    if (val > 0) {
+      const paceSeconds = Math.round(kmhToPace(val));
       setPaceMin(Math.floor(paceSeconds / 60));
-      setPaceSec(Math.round(paceSeconds % 60));
+      setPaceSec(paceSeconds % 60);
     }
   };
 
-  const handlePaceChange = (min: number, sec: number) => {
-    setPaceMin(min);
-    setPaceSec(sec);
-    const totalSeconds = min * 60 + sec;
+  const handlePaceChange = (minStr: string, secStr: string) => {
+    setPaceMin(minStr);
+    setPaceSec(secStr);
+    const totalSeconds = Number(minStr) * 60 + Number(secStr);
     if (totalSeconds > 0) {
       setKmh(Number(paceToKmh(totalSeconds).toFixed(2)));
     }
@@ -34,7 +35,7 @@ export const TreadmillConverter: React.FC = () => {
             type="number"
             step="0.1"
             value={kmh}
-            onChange={(e) => handleKmhChange(Number(e.target.value))}
+            onChange={(e) => handleKmhChange(e.target.value)}
           />
         </div>
         <div className="input-group">
@@ -43,14 +44,14 @@ export const TreadmillConverter: React.FC = () => {
             <input
               type="number"
               placeholder="分"
-              value={paceMin || ''}
-              onChange={(e) => handlePaceChange(Number(e.target.value), paceSec)}
+              value={paceMin}
+              onChange={(e) => handlePaceChange(e.target.value, String(paceSec))}
             />
             <input
               type="number"
               placeholder="秒"
-              value={paceSec || ''}
-              onChange={(e) => handlePaceChange(paceMin, Number(e.target.value))}
+              value={paceSec}
+              onChange={(e) => handlePaceChange(String(paceMin), e.target.value)}
             />
           </div>
         </div>
