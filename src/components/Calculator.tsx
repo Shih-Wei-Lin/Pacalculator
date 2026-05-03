@@ -91,24 +91,32 @@ export const Calculator: React.FC = () => {
               <div className="pace-card">
                 <span className="pace-label">E (Easy)</span>
                 <span className="pace-value">
-                  {formatPace(paces.easy.max)} - {formatPace(paces.easy.min)} / km
+                  {formatPace(paces.easy.min)} - {formatPace(paces.easy.max)} / km
                 </span>
               </div>
               <div className="pace-card">
                 <span className="pace-label">M (Marathon)</span>
-                <span className="pace-value">{formatPace(paces.marathon)} / km</span>
+                <span className="pace-value">
+                  {formatPace(paces.marathon.min)} - {formatPace(paces.marathon.max)} / km
+                </span>
               </div>
               <div className="pace-card">
                 <span className="pace-label">T (Threshold)</span>
-                <span className="pace-value">{formatPace(paces.threshold)} / km</span>
+                <span className="pace-value">
+                  {formatPace(paces.threshold.min)} - {formatPace(paces.threshold.max)} / km
+                </span>
               </div>
               <div className="pace-card">
                 <span className="pace-label">I (Interval)</span>
-                <span className="pace-value">{formatPace(paces.interval)} / km</span>
+                <span className="pace-value">
+                  {formatPace(paces.interval.min)} - {formatPace(paces.interval.max)} / km
+                </span>
               </div>
               <div className="pace-card">
                 <span className="pace-label">R (Repetition)</span>
-                <span className="pace-value">{formatPace(paces.repetition)} / km</span>
+                <span className="pace-value">
+                  {formatPace(paces.repetition.min)} - {formatPace(paces.repetition.max)} / km
+                </span>
               </div>
             </div>
           )}

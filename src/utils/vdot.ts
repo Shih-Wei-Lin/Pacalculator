@@ -54,10 +54,10 @@ export function calculateVelocityFromVO2(vdot: number): number {
 
 export interface TrainingPaces {
   easy: { min: number; max: number };
-  marathon: number;
-  threshold: number;
-  interval: number;
-  repetition: number;
+  marathon: { min: number; max: number };
+  threshold: { min: number; max: number };
+  interval: { min: number; max: number };
+  repetition: { min: number; max: number };
 }
 
 /**
@@ -69,27 +69,43 @@ export interface TrainingPaces {
 export function calculateTrainingPaces(vdot: number): TrainingPaces {
   const vVO2max = calculateVelocityFromVO2(vdot);
 
-  // Intensity percentages (approximate based on Daniels' tables)
+  // Intensity percentages based on Daniels' Running Formula
   const intensities = {
-    easyMin: 0.62,
-    easyMax: 0.70,
-    marathon: 0.80,
-    threshold: 0.88,
-    interval: 0.98,
-    repetition: 1.1,
+    easyMin: 0.59,
+    easyMax: 0.74,
+    marathonMin: 0.75,
+    marathonMax: 0.84,
+    thresholdMin: 0.83,
+    thresholdMax: 0.88,
+    intervalMin: 0.95,
+    intervalMax: 1.00,
+    repetitionMin: 1.05,
+    repetitionMax: 1.20,
   };
 
   const getSperKm = (v: number) => (1000 / v) * 60;
 
   return {
     easy: {
-      min: getSperKm(vVO2max * intensities.easyMax),
-      max: getSperKm(vVO2max * intensities.easyMin),
+      min: getSperKm(vVO2max * intensities.easyMax), // Faster pace
+      max: getSperKm(vVO2max * intensities.easyMin), // Slower pace
     },
-    marathon: getSperKm(vVO2max * intensities.marathon),
-    threshold: getSperKm(vVO2max * intensities.threshold),
-    interval: getSperKm(vVO2max * intensities.interval),
-    repetition: getSperKm(vVO2max * intensities.repetition),
+    marathon: {
+      min: getSperKm(vVO2max * intensities.marathonMax),
+      max: getSperKm(vVO2max * intensities.marathonMin),
+    },
+    threshold: {
+      min: getSperKm(vVO2max * intensities.thresholdMax),
+      max: getSperKm(vVO2max * intensities.thresholdMin),
+    },
+    interval: {
+      min: getSperKm(vVO2max * intensities.intervalMax),
+      max: getSperKm(vVO2max * intensities.intervalMin),
+    },
+    repetition: {
+      min: getSperKm(vVO2max * intensities.repetitionMax),
+      max: getSperKm(vVO2max * intensities.repetitionMin),
+    },
   };
 }
 
