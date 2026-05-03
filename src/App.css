@@ -342,14 +342,48 @@ tr:hover {
   flex-direction: column;
   gap: 8px;
 }
+.workout-chart-wrapper {
+  margin-top: 12px;
+  width: 100%;
+}
+
+.chart-container {
+  display: flex;
+  align-items: flex-end;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.chart-bar {
+  transition: transform 0.2s;
+}
+
+.chart-bar:hover {
+  filter: brightness(1.1);
+  transform: scaleY(1.05);
+}
+
+.chart-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--text);
+  margin-top: 4px;
+}
 
 .workout-item {
   display: flex;
   flex-direction: column;
-  padding: 12px;
+  padding: 16px;
   background: var(--social-bg);
   border-radius: 8px;
   border: 1px solid var(--border);
+}
+
+.workout-text {
+  margin-bottom: 8px;
 }
 
 .workout-item strong {
