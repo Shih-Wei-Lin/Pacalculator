@@ -47,7 +47,8 @@
 }
 
 .distance-selector input,
-.time-inputs input {
+.time-inputs input,
+.custom-distance-input {
   padding: 12px;
   border: 1px solid var(--border);
   border-radius: 8px;
@@ -56,6 +57,34 @@
   color: var(--text-h);
   width: 100%;
   box-sizing: border-box;
+}
+
+.custom-distance-input {
+  margin-top: 12px;
+  border-color: var(--accent-border);
+}
+
+.advanced-toggle {
+  background: none;
+  border: none;
+  color: var(--text);
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+  text-align: left;
+  width: fit-content;
+}
+
+.advanced-toggle:hover {
+  color: var(--accent);
+}
+
+.advanced-panel {
+  background: var(--social-bg);
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
 }
 
 .preset-buttons {

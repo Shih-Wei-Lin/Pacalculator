@@ -28,6 +28,7 @@ export const Calculator: React.FC = () => {
   const [seconds, setSeconds] = useState<number>(0);
   const [altitude, setAltitude] = useState<number>(0);
   const [temperature, setTemperature] = useState<number>(12.8);
+  const [showAdvanced, setShowAdvanced] = useState<boolean>(false);
   const [vdot, setVdot] = useState<number | null>(null);
   const [paces, setPaces] = useState<TrainingPaces | null>(null);
 
@@ -46,71 +47,86 @@ export const Calculator: React.FC = () => {
   return (
     <div className="calculator-container">
       <div className="input-group">
-        <label>Distance (m)</label>
-        <div className="distance-selector">
+        <label>選擇距離</label>
+        <div className="preset-buttons">
+          {COMMON_DISTANCES.map((d) => (
+            <button
+              key={d.label}
+              onClick={() => setDistance(d.value)}
+              className={distance === d.value ? 'active' : ''}
+            >
+              {d.label}
+            </button>
+          ))}
+          <button 
+            className={!COMMON_DISTANCES.some(d => d.value === distance) ? 'active' : ''}
+            onClick={() => setDistance(0)}
+          >
+            自定義
+          </button>
+        </div>
+        {!COMMON_DISTANCES.some(d => d.value === distance) && (
           <input
             type="number"
-            value={distance}
+            placeholder="輸入公尺 (m)"
+            className="custom-distance-input"
+            value={distance || ''}
             onChange={(e) => setDistance(Number(e.target.value))}
           />
-          <div className="preset-buttons">
-            {COMMON_DISTANCES.map((d) => (
-              <button
-                key={d.label}
-                onClick={() => setDistance(d.value)}
-                className={distance === d.value ? 'active' : ''}
-              >
-                {d.label}
-              </button>
-            ))}
-          </div>
-        </div>
+        )}
       </div>
 
       <div className="input-group">
-        <label>Time (HH:MM:SS)</label>
+        <label>完賽時間 (時:分:秒)</label>
         <div className="time-inputs">
           <input
             type="number"
-            placeholder="HH"
+            placeholder="時"
             value={hours || ''}
             onChange={(e) => setHours(Math.max(0, Number(e.target.value)))}
           />
-          <span>:</span>
           <input
             type="number"
-            placeholder="MM"
+            placeholder="分"
             value={minutes || ''}
             onChange={(e) => setMinutes(Math.max(0, Math.min(59, Number(e.target.value))))}
           />
-          <span>:</span>
           <input
             type="number"
-            placeholder="SS"
+            placeholder="秒"
             value={seconds || ''}
             onChange={(e) => setSeconds(Math.max(0, Math.min(59, Number(e.target.value))))}
           />
         </div>
       </div>
 
-      <div className="environment-inputs">
-        <div className="input-group">
-          <label>Altitude (m)</label>
-          <input
-            type="number"
-            value={altitude}
-            onChange={(e) => setAltitude(Number(e.target.value))}
-          />
+      <button 
+        className="advanced-toggle"
+        onClick={() => setShowAdvanced(!showAdvanced)}
+      >
+        {showAdvanced ? '收起進階設定 ↑' : '設定環境修正 (海拔/氣溫) ↓'}
+      </button>
+
+      {showAdvanced && (
+        <div className="environment-inputs advanced-panel">
+          <div className="input-group">
+            <label>海拔 (m)</label>
+            <input
+              type="number"
+              value={altitude}
+              onChange={(e) => setAltitude(Number(e.target.value))}
+            />
+          </div>
+          <div className="input-group">
+            <label>氣溫 (°C)</label>
+            <input
+              type="number"
+              value={temperature}
+              onChange={(e) => setTemperature(Number(e.target.value))}
+            />
+          </div>
         </div>
-        <div className="input-group">
-          <label>Temp (°C)</label>
-          <input
-            type="number"
-            value={temperature}
-            onChange={(e) => setTemperature(Number(e.target.value))}
-          />
-        </div>
-      </div>
+      )}
 
       {vdot && (
         <div className="results">
