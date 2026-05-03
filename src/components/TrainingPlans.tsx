@@ -1,7 +1,8 @@
 import React from 'react';
 import type { TrainingPaces } from '../utils/vdot';
 import { formatPace } from '../utils/vdot';
-import { WorkoutChart, WorkoutSegment } from './WorkoutChart';
+import { WorkoutChart } from './WorkoutChart';
+import type { WorkoutSegment } from './WorkoutChart';
 
 interface TrainingPlansProps {
   paces: TrainingPaces;

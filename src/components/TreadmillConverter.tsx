@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { kmhToPace, paceToKmh, formatPace } from '../utils/vdot';
+import { kmhToPace, paceToKmh } from '../utils/vdot';
 
 export const TreadmillConverter: React.FC = () => {
   const [kmh, setKmh] = useState<number>(12);
